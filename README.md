@@ -13,8 +13,8 @@ default settings for HLS live streaming. Built on Alpine Linux.
 ### Server
 * Pull docker image and run:
 ```
-docker pull samukei/nginx-rtmp
-docker run -p 1935:1935 -p 8080:80 -d samukei/nginx-rtmp
+docker pull samukei/docker-nginx-rtmp
+docker run -p 1935:1935 -p 8080:80 -d samukei/docker-nginx-rtmp
 ```
 or 
 

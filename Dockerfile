@@ -9,7 +9,7 @@ RUN mkdir -p /opt/data && mkdir /www \
   && apk add --no-cache \
     git gcc binutils-libs binutils build-base libgcc make pkgconf pkgconfig \
     openssl openssl-dev ca-certificates pcre \
-    musl-dev libc-dev pcre-dev zlib-dev \
+    musl-dev libc-dev pcre-dev zlib-dev gettext \
   # Get nginx source.
   && cd /tmp && wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
   && tar zxf nginx-${NGINX_VERSION}.tar.gz \

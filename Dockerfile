@@ -66,7 +66,9 @@ RUN mkdir -p /opt/data && mkdir /www \
     --disable-debug \
   && make && make install && make distclean \
   # Cleanup.
-  && rm -rf /var/cache/* /tmp/*
+  && rm -rf /var/cache/* /tmp/* \
+  # Create cache dir
+  && mkdir -p /var/cache/nginx/cache /var/cache/nginx/tmp
 
 ADD nginx.conf /opt/nginx/nginx.conf
 ADD static /www/static

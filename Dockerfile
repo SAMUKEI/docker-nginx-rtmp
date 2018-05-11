@@ -3,18 +3,25 @@ FROM alpine:3.4
 ENV NGINX_VERSION 1.13.8
 ENV NGINX_RTMP_VERSION 1.2.1
 ENV FFMPEG_VERSION 3.3.4
-
+ENV NGX_MRUBY_VERSION 1.20.2
 RUN mkdir -p /opt/data && mkdir /www \
   && apk update \
   && apk add --no-cache \
     git gcc binutils-libs binutils build-base libgcc make pkgconf pkgconfig \
     openssl openssl-dev ca-certificates pcre \
     musl-dev libc-dev pcre-dev zlib-dev gettext \
-    logrotate tzdata \
+    logrotate tzdata bison ruby-rake \
   # Get nginx source.
   && cd /tmp && wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
   && tar zxf nginx-${NGINX_VERSION}.tar.gz \
   && rm nginx-${NGINX_VERSION}.tar.gz \
+  # Get nginx-mruby module.
+  && cd /tmp && wget https://github.com/matsumotory/ngx_mruby/archive/v${NGX_MRUBY_VERSION}.tar.gz \
+  && tar zxf v${NGX_MRUBY_VERSION}.tar.gz && rm v${NGX_MRUBY_VERSION}.tar.gz \
+  && cd /tmp/ngx_mruby-${NGX_MRUBY_VERSION} \
+  && ./configure \
+      --with-ngx-src-root=/tmp/nginx-${NGINX_VERSION} \
+  && make -s build_mruby && make -s generate_gems_config \
   # Get nginx-rtmp module.
   && cd /tmp && wget https://github.com/arut/nginx-rtmp-module/archive/v${NGINX_RTMP_VERSION}.tar.gz \
   && tar zxf v${NGINX_RTMP_VERSION}.tar.gz && rm v${NGINX_RTMP_VERSION}.tar.gz \
@@ -23,6 +30,8 @@ RUN mkdir -p /opt/data && mkdir /www \
   && cd /tmp/nginx-${NGINX_VERSION} \
   && ./configure \
     --prefix=/opt/nginx \
+    --add-module=/tmp/ngx_mruby-${NGX_MRUBY_VERSION} \
+    --add-module=/tmp/ngx_mruby-${NGX_MRUBY_VERSION}/dependence/ngx_devel_kit \
     --add-module=/tmp/nginx-rtmp-module-${NGINX_RTMP_VERSION} \
     --add-module=/tmp/nginx-http-auth-digest \
     --conf-path=/opt/nginx/nginx.conf \

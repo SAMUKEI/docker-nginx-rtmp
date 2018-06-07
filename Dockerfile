@@ -29,6 +29,7 @@ RUN mkdir -p /opt/data && mkdir /www \
     --http-log-path=/opt/nginx/logs/access.log \
     --with-http_sub_module \
     --with-http_auth_request_module \
+    --with-http_realip_module \
     --with-debug \
   && cd /tmp/nginx-${NGINX_VERSION} && make && make install \
   && cp /tmp/nginx-http-auth-digest/htdigest.py /usr/local/bin/ \

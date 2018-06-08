@@ -17,13 +17,11 @@ RUN mkdir -p /opt/data && mkdir /www \
   # Get nginx-rtmp module.
   && cd /tmp && wget https://github.com/arut/nginx-rtmp-module/archive/v${NGINX_RTMP_VERSION}.tar.gz \
   && tar zxf v${NGINX_RTMP_VERSION}.tar.gz && rm v${NGINX_RTMP_VERSION}.tar.gz \
-  && git clone https://github.com/samizdatco/nginx-http-auth-digest.git \
   # Compile nginx with nginx-rtmp module.
   && cd /tmp/nginx-${NGINX_VERSION} \
   && ./configure \
     --prefix=/opt/nginx \
     --add-module=/tmp/nginx-rtmp-module-${NGINX_RTMP_VERSION} \
-    --add-module=/tmp/nginx-http-auth-digest \
     --conf-path=/opt/nginx/nginx.conf \
     --error-log-path=/opt/nginx/logs/error.log \
     --http-log-path=/opt/nginx/logs/access.log \
@@ -32,7 +30,6 @@ RUN mkdir -p /opt/data && mkdir /www \
     --with-http_realip_module \
     --with-debug \
   && cd /tmp/nginx-${NGINX_VERSION} && make && make install \
-  && cp /tmp/nginx-http-auth-digest/htdigest.py /usr/local/bin/ \
   # ffmpeg dependencies.
   && apk add --no-cache --update \
     nasm yasm-dev lame-dev libogg-dev x264-dev libvpx-dev libvorbis-dev \
